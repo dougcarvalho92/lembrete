@@ -22,7 +22,7 @@ interface PageHeaderProps {
   description?: String;
 }
 
-const RememberCard: React.FC<PageHeaderProps> = (props) => {
+const ReminderCard: React.FC<PageHeaderProps> = (props) => {
   const classes = useStyles();
 
   return (
@@ -83,4 +83,4 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-export default RememberCard;
+export default ReminderCard;

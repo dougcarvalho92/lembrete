@@ -146,7 +146,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(1),
     },
     fabButton: {
-      position: "absolute",
+      position: "fixed",
       bottom: 50,
       right: 50,
     },

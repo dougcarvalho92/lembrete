@@ -34,16 +34,15 @@ const database = {
       };
     });
   },
-  findAll() {
-    return new Promise((resolve) => {
-      let request = getObjectStore().getAll();
-
-      request.onsuccess = () => {
-        resolve(request.result);
-      };
-    });
+  async findAll() {
+    try {
+      var result = await getObjectStore().getAll();
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
   },
-  insert(item) {
+  async insert(item) {
     return new Promise((resolve) => {
       item.id = new Date().getTime();
 
