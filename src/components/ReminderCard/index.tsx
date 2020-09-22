@@ -1,40 +1,34 @@
 import React from "react";
-
-import clsx from "clsx";
-import Avatar from "@material-ui/core/Avatar";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { green, red, teal, yellow } from "@material-ui/core/colors";
-
+import { red, teal, yellow } from "@material-ui/core/colors";
 import { CheckCircle, Edit, RemoveCircle } from "@material-ui/icons";
 import { Button, ButtonGroup } from "@material-ui/core";
 import { Paper } from "@material-ui/core";
 import { Divider } from "@material-ui/core/";
+import IReminder from "../../interfaces/IReminders";
+import { useReminder } from "../../context/ReminderContext";
 
-interface PageHeaderProps {
-  title: String;
-  description?: String;
-}
+import RemindersService from "../../services/ReminderServices";
+import { AxiosResponse } from "axios";
 
-const ReminderCard: React.FC<PageHeaderProps> = (props) => {
+const ReminderCard: React.FC<IReminder> = (props) => {
   const classes = useStyles();
+  const { reminders, handleSetList } = useReminder();
+
+  const handleRemoveItem = (id: String) => {
+    RemindersService.remove(id).then((result: AxiosResponse) => {
+      if (result.status) {
+        handleSetList(reminders.filter((reminder) => reminder.id !== id));
+      }
+    });
+  };
 
   return (
     <Paper elevation={3}>
-      <CardHeader
-        title={props.title}
-        avatar={
-          <Avatar aria-label="level" className={classes.avatar}>
-            A
-          </Avatar>
-        }
-      />
+      <CardHeader title={props.title} />
       <Divider />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
@@ -43,15 +37,15 @@ const ReminderCard: React.FC<PageHeaderProps> = (props) => {
       </CardContent>
       <Divider />
       <ButtonGroup disableElevation variant="text" className={classes.buttons}>
-        <Button aria-label="finish" className={(classes.button, classes.check)}>
-          <CheckCircle />
-        </Button>
         <Button aria-label="edit" className={(classes.button, classes.edit)}>
           <Edit />
         </Button>
         <Button
           aria-label="remove"
           className={(classes.button, classes.remove)}
+          onClick={() => {
+            handleRemoveItem(props.id);
+          }}
         >
           <RemoveCircle />
         </Button>
@@ -67,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
     buttons: {
       width: "100%",
       display: "grid",
-      gridTemplateColumns: "1fr 1fr 1fr",
+      gridTemplateColumns: "1fr 1fr",
     },
     button: {
       borderRadius: 0,

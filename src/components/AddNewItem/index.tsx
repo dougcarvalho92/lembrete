@@ -18,13 +18,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import { createStyles } from "@material-ui/core/styles";
 import { Theme } from "@material-ui/core/styles";
 import { Add } from "@material-ui/icons";
-import DB from "../../services/IndexedDb";
+import DBReminders from "../../services/ReminderServices";
+import { useReminder } from "../../context/ReminderContext";
+
 const AddNewItem: React.FC = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [prioridade, setPrioridade] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const { reminders, handleSetList } = useReminder();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,21 +35,19 @@ const AddNewItem: React.FC = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleAddItem = async () => {
-    await DB.insert({ title, description, level: prioridade }).then(
-      (result) => {
-        if (result.id) {
-          handleClose();
-          alert("Adicionado com sucesso");
-        } else {
-          handleClose();
-          alert(
-            "Houve um falha! Entre em contato ou tente novamente mais tarde"
-          );
-        }
+
+  async function handleAddItem() {
+    const item = { title, description, level: prioridade };
+    await DBReminders.create(item).then((result: any) => {
+      if (result.data.id) {
+        handleSetList([...reminders, result.data]);
+        handleClose();
+      } else {
+        handleClose();
+        alert("Houve um falha! Entre em contato ou tente novamente mais tarde");
       }
-    );
-  };
+    });
+  }
   return (
     <div>
       <Dialog

@@ -3,46 +3,39 @@ import Grid from "@material-ui/core/Grid";
 import ReminderCard from "../../components/ReminderCard";
 import AddNewItem from "../../components/AddNewItem";
 import Pagination from "@material-ui/lab/Pagination";
-import DB from "../../services/IndexedDb";
+
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import RemindersService from "../../services/ReminderServices";
+import { useReminder } from "../../context/ReminderContext";
 
 export default function Home() {
-  const [remindersList, setRemindersList] = useState([
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-  ]);
-  const [pagination, setPagination] = useState(0);
+  const { reminders, handleSetList } = useReminder();
+
   const handleGetItems = async () => {
-    return await DB.findAll();
-  };
-  const handleNumberPagination = () => {
-    return setPagination(Math.ceil(remindersList.length / 12));
+    const { data } = await RemindersService.list();
+    handleSetList(data);
   };
 
   useEffect(() => {
-    const items = handleGetItems();
-    console.log(items);
-    handleNumberPagination();
-  }, [remindersList]);
+    handleGetItems();
+  }, []);
 
   return (
     <Grid container spacing={3} style={{ display: "flex" }}>
-   
-      {remindersList.map((value, index) => (
-        <Grid item sm={12} xs={12} md={3} key={index}>
+      {reminders.map((item, index) => (
+        <Grid
+          item
+          sm={12}
+          xs={12}
+          md={3}
+          key={index}
+          className={item.level === 20 ? "media" : "alta"}
+        >
           <ReminderCard
-            title="Olá"
-            description="Fazer caféasdasdasdasdasdasd"
+            id={item.id}
+            title={item.title}
+            description={item.description}
+            level={item.level}
           />
         </Grid>
       ))}
@@ -52,3 +45,13 @@ export default function Home() {
     </Grid>
   );
 }
+makeStyles((theme: Theme) =>
+  createStyles({
+    alta: {
+      marginTop: theme.spacing(2),
+    },
+    media: {
+      borderTopColor: "#3d2d",
+    },
+  })
+);
