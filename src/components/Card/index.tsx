@@ -6,39 +6,27 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
-import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
 
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { red, yellow } from "@material-ui/core/colors";
-import { Grid, useTheme } from "@material-ui/core";
-import {
-  CheckCircle,
-  Edit,
-  EditAttributes,
-  RemoveCircle,
-} from "@material-ui/icons";
+import { green, red, teal, yellow } from "@material-ui/core/colors";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    avatar: {
-      backgroundColor: red[500],
-    },
-  })
-);
+import { CheckCircle, Edit, RemoveCircle } from "@material-ui/icons";
+import { Button, ButtonGroup } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
+import { Divider } from "@material-ui/core/";
+
 interface PageHeaderProps {
   title: String;
   description?: String;
 }
+
 const RememberCard: React.FC<PageHeaderProps> = (props) => {
   const classes = useStyles();
-  const { palette } = useTheme();
 
   return (
-    <Card>
+    <Paper elevation={3}>
       <CardHeader
         title={props.title}
         avatar={
@@ -47,25 +35,52 @@ const RememberCard: React.FC<PageHeaderProps> = (props) => {
           </Avatar>
         }
       />
+      <Divider />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          {props.description}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="finish">
+      <Divider />
+      <ButtonGroup disableElevation variant="text" className={classes.buttons}>
+        <Button aria-label="finish" className={(classes.button, classes.check)}>
           <CheckCircle />
-        </IconButton>
-        <IconButton aria-label="edit">
+        </Button>
+        <Button aria-label="edit" className={(classes.button, classes.edit)}>
           <Edit />
-        </IconButton>
-        <IconButton aria-label="remove">
+        </Button>
+        <Button
+          aria-label="remove"
+          className={(classes.button, classes.remove)}
+        >
           <RemoveCircle />
-        </IconButton>
-      </CardActions>
-    </Card>
+        </Button>
+      </ButtonGroup>
+    </Paper>
   );
 };
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    avatar: {
+      backgroundColor: red[500],
+    },
+    buttons: {
+      width: "100%",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+    },
+    button: {
+      borderRadius: 0,
+    },
+    check: {
+      color: teal[400],
+    },
+    edit: {
+      color: yellow[400],
+    },
+    remove: {
+      color: red[400],
+    },
+  })
+);
 export default RememberCard;
