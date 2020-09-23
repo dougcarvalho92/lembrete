@@ -1,6 +1,7 @@
 export default interface Reminders {
-  id: String;
+  id?: String ;
   title: String;
   description: String;
   level: Number;
+  
 }

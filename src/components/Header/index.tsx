@@ -1,14 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fade, makeStyles } from "@material-ui/core/styles";
+
 import AppBar from "@material-ui/core/AppBar";
+import DBReminders from "../../services/ReminderServices";
+import IReminder from "../../interfaces/IReminders";
+import InputBase from "@material-ui/core/InputBase";
+import { Search } from "@material-ui/icons/";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
-import { fade, makeStyles } from "@material-ui/core/styles";
-import { Search } from "@material-ui/icons/";
+import useDebounce from "../../hooks/useDebounce";
+import { useReminder } from "../../context/ReminderContext";
 
+export default function Header() {
+  const classes = useStyles();
+  const { reminders, handleSetList } = useReminder();
+  const [textFilter, setTextFilter] = useState("");
+  const filtro = useDebounce(textFilter, 1000);
+
+  useEffect(() => {
+    DBReminders.list().then((data) => {
+      if (filtro) {
+        let filters = data.items.filter((item: IReminder) =>
+          item.title.includes(filtro.toString())
+        );
+
+        handleSetList(filters);
+        return;
+      } else {
+        handleSetList(data.items);
+      }
+    });
+  }, [filtro]);
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography className={classes.title} variant="h6" noWrap>
+            Lembra-te
+          </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <Search />
+            </div>
+            <InputBase
+              placeholder="Procurar…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ "aria-label": "search" }}
+              onChange={(item) => setTextFilter(item.target.value)}
+            />
+          </div>
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
+}
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom:30
+    marginBottom: 30,
   },
 
   title: {
@@ -58,32 +110,3 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-export default function Header() {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
-            Lembra-te
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <Search />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
-}
