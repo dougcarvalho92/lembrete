@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
 import { Theme, createStyles, makeStyles } from "@material-ui/core";
 
-import AddNewItem from "../../components/AddNewItem";
-import FabButton from "../../components/FabButton";
 import Grid from "@material-ui/core/Grid";
 import IReminder from "../../interfaces/IReminders";
+import React from "react";
 import ReminderCard from "../../components/ReminderCard";
 import { useReminder } from "../../context/ReminderContext";
 
@@ -38,10 +36,6 @@ const ReminderList: React.FC<ReminderData> = ({ reminders, loading }) => {
             />
           </Grid>
         ))}
-        <Grid item sm={12} xs={12} md={3} style={{ display: "flex" }}>
-          <AddNewItem />
-          <FabButton />
-        </Grid>
       </Grid>
     );
   }
@@ -50,10 +44,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: "flex",
-    },
-    pagination: {
-      position: "absolute",
-      bottom: 50,
     },
   })
 );

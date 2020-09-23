@@ -13,7 +13,7 @@ import { useReminder } from "../../context/ReminderContext";
 
 export default function Header() {
   const classes = useStyles();
-  const { reminders, handleSetList } = useReminder();
+  const { reminders, handleSetList, handleLoadData } = useReminder();
   const [textFilter, setTextFilter] = useState("");
   const filtro = useDebounce(textFilter, 1000);
 

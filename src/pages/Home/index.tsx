@@ -1,33 +1,29 @@
+import { Grid, Theme, createStyles, makeStyles } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { Theme, createStyles, makeStyles } from "@material-ui/core";
 
+import Form from "../../components/Form";
 import { Pagination } from "@material-ui/lab";
 import ReminderList from "../../components/ReminderList";
-import RemindersService from "../../services/ReminderServices";
 import { useReminder } from "../../context/ReminderContext";
 
 export default function Home() {
-  const { reminders, handleSetList } = useReminder();
+  const { reminders, handleLoadData } = useReminder();
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostsPerPage] = useState(2);
-
+  const postPerPage = 8;
+  const [messageOpen, setMessageOpen] = useState(false);
   const handleChange = async (
     event: React.ChangeEvent<unknown>,
     value: number
   ) => {
     setCurrentPage(value);
   };
-
+ 
   useEffect(() => {
-    const fetchReminders = async () => {
-      setLoading(true);
-      const items = await RemindersService.list();
-      handleSetList(items.data);
-      setLoading(false);
-    };
-    fetchReminders();
+    setLoading(true);
+    handleLoadData();
+    setLoading(false);
   }, []);
 
   const indexOfLastReminder = currentPage * postPerPage;
@@ -49,6 +45,9 @@ export default function Home() {
         onChange={handleChange}
         color="primary"
       />
+      <Grid item sm={12} xs={12} md={3} style={{ display: "flex" }}>
+        <Form />
+      </Grid>
     </>
   );
 }
@@ -59,7 +58,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     pagination: {
-      position: "absolute",
+      [theme.breakpoints.down("sm")]: {
+        position: "fixed",
+      },
+      [theme.breakpoints.up("md")]: {
+        position: "absolute",
+      },
       bottom: 50,
     },
   })

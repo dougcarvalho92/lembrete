@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup } from "@material-ui/core";
+import { Box, Button, ButtonGroup, Fade } from "@material-ui/core";
 import { Delete, Edit } from "@material-ui/icons";
 import {
   Theme,
@@ -31,39 +31,49 @@ const ReminderCard: React.FC<IReminder> = (props) => {
   };
 
   return (
-    <Box
-      borderColor={colors[props.level as number]}
-      borderTop={10}
-      borderRadius="borderRadius"
-      component={Paper}
-    >
-      <CardHeader title={props.title} />
-      <Divider />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {props.description}
-        </Typography>
-      </CardContent>
-      <Divider />
-      <ButtonGroup disableElevation variant="text" className={classes.buttons}>
-        <Button
-          aria-label="edit"
-          className={(classes.button, classes.edit)}
-          onClick={() => handleClickOpen(props)}
+    <Fade in={true}>
+      <Box
+        borderColor={colors[props.level as number]}
+        borderTop={10}
+        borderRadius="borderRadius"
+        component={Paper}
+      >
+        <CardHeader title={props.title} />
+
+        <Divider />
+        <CardContent>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {props.description}
+          </Typography>
+        </CardContent>
+        <Divider />
+        <ButtonGroup
+          disableElevation
+          variant="text"
+          className={classes.buttons}
         >
-          <Edit />
-        </Button>
-        <Button
-          aria-label="remove"
-          className={(classes.button, classes.remove)}
-          onClick={() => {
-            handleRemoveItem(props.id as string);
-          }}
-        >
-          <Delete />
-        </Button>
-      </ButtonGroup>
-    </Box>
+          <Button
+            aria-label="edit"
+            className={(classes.button, classes.edit)}
+            onClick={() => handleClickOpen(props)}
+          >
+            <Edit />
+          </Button>
+          <Button
+            aria-label="remove"
+            className={(classes.button, classes.remove)}
+            onClick={() => {
+              let removeOk = window.confirm("Tem certeza?");
+              if (removeOk) {
+                handleRemoveItem(props.id as string);
+              }
+            }}
+          >
+            <Delete />
+          </Button>
+        </ButtonGroup>
+      </Box>
+    </Fade>
   );
 };
 const useStyles = makeStyles((theme: Theme) =>

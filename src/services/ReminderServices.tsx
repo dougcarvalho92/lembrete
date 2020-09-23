@@ -11,7 +11,13 @@ const RemindersService = {
     return await api.post(endpoint, item);
   },
   async update(item: IReminder) {
-    return await api.put(`${endpoint}?id=${item.id}`, item);
+    const id = item.id;
+    const newItem = {
+      title: item.title,
+      description: item.description,
+      level: item.level,
+    };
+    return await api.put(`${endpoint}?id=${id}`, newItem);
   },
   async remove(id: String) {
     return await api.delete(`${endpoint}?id=${id}`);
