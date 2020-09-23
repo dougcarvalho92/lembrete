@@ -1,72 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { Theme, createStyles, makeStyles } from "@material-ui/core";
 
-import AddNewItem from "../../components/AddNewItem";
-import FabButton from "../../components/FabButton";
-import Grid from "@material-ui/core/Grid";
 import { Pagination } from "@material-ui/lab";
-import ReminderCard from "../../components/ReminderCard";
+import ReminderList from "../../components/ReminderList";
 import RemindersService from "../../services/ReminderServices";
 import { useReminder } from "../../context/ReminderContext";
 
 export default function Home() {
   const { reminders, handleSetList } = useReminder();
   const classes = useStyles();
-  const [pagination, setPagination] = useState({
-    offset: 0,
-    perPage: 8,
-    currentPage: 0,
-    length: 0,
-  });
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage, setPostsPerPage] = useState(2);
 
-  const handleGetItems = async () => {
-    const { items, requestData } = await RemindersService.list();
-    handleSetList(items);
-    setPagination(requestData);
-  };
   const handleChange = async (
     event: React.ChangeEvent<unknown>,
     value: number
   ) => {
-    setPagination({ ...pagination, currentPage: value });
-    const { items, requestData } = await RemindersService.list(value );
-    console.log(items);
+    setCurrentPage(value);
   };
+
   useEffect(() => {
-    handleGetItems();
+    const fetchReminders = async () => {
+      setLoading(true);
+      const items = await RemindersService.list();
+      handleSetList(items.data);
+      setLoading(false);
+    };
+    fetchReminders();
   }, []);
 
+  const indexOfLastReminder = currentPage * postPerPage;
+
+  const indexOfFirsReminder = indexOfLastReminder - postPerPage;
+  const currentReminder = reminders.slice(
+    indexOfFirsReminder,
+    indexOfLastReminder
+  );
+  const totalPages = Math.ceil(reminders.length / postPerPage);
   return (
     <>
-      <Grid container spacing={3} className={classes.container}>
-        {reminders.map((item, index) => (
-          <Grid
-            item
-            sm={12}
-            xs={12}
-            md={3}
-            key={index}
-            className={item.level === 20 ? "media" : "alta"}
-          >
-            <ReminderCard
-              id={item.id}
-              title={item.title}
-              description={item.description}
-              level={item.level}
-            />
-          </Grid>
-        ))}
-        <Grid item sm={12} xs={12} md={3} style={{ display: "flex" }}>
-          <AddNewItem />
-          <FabButton />
-        </Grid>
-      </Grid>
+      <ReminderList reminders={currentReminder} loading={loading} />
       <Pagination
-        count={pagination.length}
+        count={totalPages}
         shape="rounded"
         className={classes.pagination}
-        page={pagination.currentPage}
+        page={currentPage}
         onChange={handleChange}
+        color="primary"
       />
     </>
   );
@@ -76,9 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
     alta: {
       marginTop: theme.spacing(2),
     },
-    container: {
-      display: "flex",
-    },
+
     pagination: {
       position: "absolute",
       bottom: 50,

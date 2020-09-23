@@ -18,16 +18,16 @@ export default function Header() {
   const filtro = useDebounce(textFilter, 1000);
 
   useEffect(() => {
-    DBReminders.list().then((data) => {
+    DBReminders.list().then(({ data }) => {
       if (filtro) {
-        let filters = data.items.filter((item: IReminder) =>
+        let filters = data.filter((item: IReminder) =>
           item.title.includes(filtro.toString())
         );
 
         handleSetList(filters);
         return;
       } else {
-        handleSetList(data.items);
+        handleSetList(data);
       }
     });
   }, [filtro]);
