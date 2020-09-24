@@ -8,7 +8,7 @@ const RemindersService = {
     var data = (await api.get(endpoint)).data;
 
     return data.sort((a: IReminder, b: IReminder) => {
-      console.log(a, b);
+     
       return a.level < b.level ? 1 : -1;
     });
   },
