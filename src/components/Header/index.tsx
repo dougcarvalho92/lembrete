@@ -13,22 +13,22 @@ import { useReminder } from "../../context/ReminderContext";
 
 export default function Header() {
   const classes = useStyles();
-  const { reminders, handleSetList, handleLoadData } = useReminder();
+  const { handleSetList, handleLoading } = useReminder();
   const [textFilter, setTextFilter] = useState("");
   const filtro = useDebounce(textFilter, 1000);
 
   useEffect(() => {
+    handleLoading(true);
     DBReminders.list().then(({ data }) => {
       if (filtro) {
         let filters = data.filter((item: IReminder) =>
           item.title.includes(filtro.toString())
         );
-
         handleSetList(filters);
-        return;
       } else {
         handleSetList(data);
       }
+      handleLoading(false);
     });
   }, [filtro]);
 

@@ -16,6 +16,10 @@ export const ReminderProvider: React.FC = ({ children }) => {
   const [description, setDescription] = useState("");
   const [level, setLevel] = useState(0);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const handleLoading = async (loading: boolean) => {
+    setLoading(loading);
+  };
 
   const handleLoadData = async () => {
     const remindersData = await DBReminders.list();
@@ -79,6 +83,7 @@ export const ReminderProvider: React.FC = ({ children }) => {
         level,
         open,
         id,
+        loading,
         handleSetId,
         handleCreate,
         handleUpdate,
@@ -89,7 +94,8 @@ export const ReminderProvider: React.FC = ({ children }) => {
         handleSetTitle,
         handleSetDescription,
         handleSetLevel,
-        handleLoadData
+        handleLoadData,
+        handleLoading,
       }}
     >
       {children}

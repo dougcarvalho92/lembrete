@@ -7,6 +7,7 @@ export default interface ReminderContexData {
   description: String;
   level: Number;
   id?: String | null;
+  loading: boolean;
   handleSetTitle(title: String): Promise<void>;
   handleSetDescription(description: String): Promise<void>;
   handleSetLevel(level: Number): Promise<void>;
@@ -17,5 +18,6 @@ export default interface ReminderContexData {
   handleSetList(reminders: IReminder[]): Promise<void>;
   handleClickOpen(item: IReminder | null): Promise<void>;
   handleClose(): Promise<void>;
-  handleLoadData():  Promise<void>;
+  handleLoadData(): Promise<void>;
+  handleLoading(loading: Boolean): Promise<void>;
 }

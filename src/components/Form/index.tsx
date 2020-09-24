@@ -18,6 +18,7 @@ const Form: React.FC = () => {
     title,
     description,
     level,
+    id,
     handleSetTitle,
     handleSetDescription,
     handleSetLevel,
@@ -51,6 +52,7 @@ const Form: React.FC = () => {
                 handleSetLevel(item.target.value as Number);
               }}
               label="Level"
+              disabled={id ? true : false}
             >
               <MenuItem value="">
                 <em>None</em>
