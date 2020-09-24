@@ -2,6 +2,8 @@
 
 Desenvolvido em [ReactJS](https://pt-br.reactjs.org/) com [MaterialUI](http://material-ui.com/)
 
+![](readme/tela.png)
+
 ## Instalação
 
 Abra o terminal e clone o repositório com o comando abaixo:
