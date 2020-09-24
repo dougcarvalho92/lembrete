@@ -1,6 +1,10 @@
 import {
+  Badge,
+  CircularProgress,
   FormControl,
   InputLabel,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   Select,
   TextField,
@@ -8,6 +12,7 @@ import {
 import React, { useState } from "react";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 
+import { ColorLensRounded } from "@material-ui/icons";
 import FabButton from "../FabButton";
 import PopUp from "../PopUp";
 import { useReminder } from "../../context/ReminderContext";
@@ -57,9 +62,24 @@ const Form: React.FC = () => {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={0}>Baixa</MenuItem>
-              <MenuItem value={1}>Média</MenuItem>
-              <MenuItem value={2}>Alta</MenuItem>
+              <MenuItem value={0}>
+                <ListItemIcon>
+                  <ColorLensRounded />
+                </ListItemIcon>
+                <ListItemText primary="Baixa" />
+              </MenuItem>
+              <MenuItem value={1}>
+                <ListItemIcon>
+                  <ColorLensRounded />
+                </ListItemIcon>
+                <ListItemText primary="Média" />
+              </MenuItem>
+              <MenuItem value={2}>
+                <ListItemIcon>
+                  <ColorLensRounded />
+                </ListItemIcon>
+                <ListItemText primary="Alta" />
+              </MenuItem>
             </Select>
           </FormControl>
           <FormControl className={classes.formControl} fullWidth>
