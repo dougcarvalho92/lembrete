@@ -19,7 +19,7 @@ export default function Header() {
 
   useEffect(() => {
     handleLoading(true);
-    DBReminders.list().then(({ data }) => {
+    DBReminders.list().then((data) => {
       if (filtro) {
         let filters = data.filter((item: IReminder) =>
           item.title.includes(filtro.toString())

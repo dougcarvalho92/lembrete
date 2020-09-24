@@ -23,7 +23,7 @@ export const ReminderProvider: React.FC = ({ children }) => {
 
   const handleLoadData = async () => {
     const remindersData = await DBReminders.list();
-    setReminders(remindersData.data);
+    setReminders(remindersData);
   };
 
   const handleClickOpen = async (item: IReminder | null) => {

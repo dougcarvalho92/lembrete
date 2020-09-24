@@ -5,7 +5,12 @@ const endpoint = "reminders";
 
 const RemindersService = {
   async list(page = 1) {
-    return await api.get(endpoint);
+    var data = (await api.get(endpoint)).data;
+
+    return data.sort((a: IReminder, b: IReminder) => {
+      console.log(a, b);
+      return a.level < b.level ? 1 : -1;
+    });
   },
   async create(item: IReminder) {
     return await api.post(endpoint, item);
