@@ -1,4 +1,4 @@
-# Lembrate-te
+# Lembrete
 
 Desenvolvido em [ReactJS](https://pt-br.reactjs.org/) com [MaterialUI](http://material-ui.com/)
 
